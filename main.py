@@ -1,8 +1,8 @@
-from backend.apps.rag.services.loadingdata_1 import load_pdf
-from backend.apps.rag.services.chunkingdata_2 import split_documents
-from backend.apps.rag.services.vectordb_3 import create_database, clear_database
-from backend.apps.rag.services.query_database_4 import query_database
-from backend.apps.rag.services.llmresponse_5 import query_rag
+from backend.apps.rag.services.loadingdata import load_pdf
+from backend.apps.rag.services.chunkingdata import split_documents
+from backend.apps.rag.services.vectordb import create_database, clear_database
+from backend.apps.rag.services.query_database import query_database
+from backend.apps.rag.services.llmresponse import query_rag
 from typing import List, Dict, Any
 
 
