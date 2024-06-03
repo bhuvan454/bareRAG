@@ -12,10 +12,13 @@ __pycache__/
 # C extensions
 *.so
 
+# no db folder
+db/
+
 # Distribution / packaging
 .Python
 build/
 develop-eggs/
 dist/
 downloads/
-db/
+

@@ -8,6 +8,19 @@ Description: This file is used to load and preprocess the files for the rag mode
 from typing import List, Dict, Any
 from langchain_community.document_loaders import PyMuPDFLoader
 
+# from langchain.document_loaders import (
+#     PyPDFLoader,
+#     DirectoryLoader,
+#     CSVLoader,
+#     Docx2txtLoader,
+#     TextLoader,
+#     UnstructuredExcelLoader,
+#     UnstructuredHTMLLoader,
+#     UnstructuredPowerPointLoader,
+#     UnstructuredMarkdownLoader,
+#     JSONLoader
+# )
+
 def load_pdf(file_path: str) -> Dict[str, Any]:
     """
     Load the pdf file and return the text content

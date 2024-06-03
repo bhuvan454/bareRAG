@@ -10,7 +10,7 @@ class Config:
     QDRANT_COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME","ragcollection")
     
     
-    DATA_DOC_PATH = os.getenv("DATA_DOC_PATH", os.path.join(data_path, "data"))
+    DATA_DOC_PATH = os.getenv("DATA_DOC_PATH", os.path.join(data_path, "documents"))
     CHROMA_PATH = os.getenv("CHROMA_PATH", os.path.join(data_path, "chroma_db"))
 
 

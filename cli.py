@@ -5,15 +5,13 @@ from backend.apps.rag.utils.embeddingfun import CustomOllamaEmbeddings
 from backend.apps.rag.services.query_database import query_database
 from backend.apps.rag.services.llmresponse import query_rag
 from backend.apps.rag.config import Config
-import os
-import shutil
-from tqdm import tqdm
+
+
 
 class ChromaDBManager:
     def __init__(self):
         self.vector_db = ChromaDB()
         self.collection = None
-
 
     def get_list_collections(self):
         return self.vector_db.get_list_collections()
@@ -21,7 +19,6 @@ class ChromaDBManager:
     def get_collection(self, collection_name: str, embedding_function):
         return self.vector_db.get_collection(collection_name,CustomOllamaEmbeddings())
 
-    # initilaizing the database with the pdf files
     def initialize_database(self, pdf_path: str, collection_name: str, debug: bool = False):
         documents_data = load_pdf(pdf_path)
         if debug:
@@ -38,7 +35,7 @@ class ChromaDBManager:
         print(f"Collection '{collection_name}' created and data added.")
 
 
-    # querying the database with the query text
+    
     def interactive_query(self, collection, debug: bool = False):
         llm_rag_query  = query_rag("llama3")
         while True:
@@ -52,21 +49,13 @@ class ChromaDBManager:
                 print("Query Context:", query_context)
                 print("Prompt:", prompt)
 
-            # rag_response = query_rag(query_context, prompt)
             rag_response = llm_rag_query.invoke(query_context, prompt)
             print("RAG Response:", rag_response)
-
-    def clear_database(self):
-        if os.path.exists(Config().CHROMA_PATH):
-            shutil.rmtree(Config().CHROMA_PATH)
-            print("Database cleared.")
-        else:
-            print("No database to clear.")
 
     def delete_collection(self, collection_name: str):
         self.collection = self.vector_db.get_collection(collection_name, CustomOllamaEmbeddings())
         if self.collection:
-            self.vector_db.chroma_client.delete_collection(self.collection)
+            self.vector_db.chroma_client.delete_collection(collection_name)
             print(f"Collection '{collection_name}' deleted.")
         else:
             print(f"Collection '{collection_name}' not found.")
@@ -84,9 +73,8 @@ def main():
         print("\nOptions:")
         print("1. Load PDF and create collection")
         print("2. Query the database")
-        print("3. Delete the entire database")
-        print("4. Delete a specific collection")
-        print("5. Exit")
+        print("3. Delete a specific collection")
+        print("4. Exit")
 
         choice = input("Enter the number of your choice: ")
 
@@ -96,12 +84,19 @@ def main():
             db_manager.initialize_database(pdf_path, collection_name, args.debug)
 
         elif choice == '2':
-            # show all the collections and ask the user to select one
             print("Available collections:")
             collections_list = db_manager.get_list_collections()
             for collection in collections_list:
                 print(collection.name)
             collection_name = input("Enter the name of the collection to query: ")
+
+            if not collection_name:
+                print("Collection name cannot be empty.")
+                continue
+            if collection_name not in [collection.name for collection in collections_list]:
+                print(f"Collection '{collection_name}' not found.")
+                continue
+        
             collection = db_manager.get_collection(collection_name, CustomOllamaEmbeddings())
             print(collection)
 
@@ -111,24 +106,18 @@ def main():
 
             db_manager.interactive_query(collection, args.debug)
 
-        elif choice == '3':
-            db_manager.clear_database()
 
-        elif choice == '4':
+        elif choice == '3':
             collection_name = input("Enter the name of the collection to delete: ")
             db_manager.delete_collection(collection_name)
 
-        elif choice == '5':
+        elif choice == '4':
             print("Exiting...")
             break
 
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice,pick the right option.")
 
 
 if __name__ == '__main__':
     main()
-
-
-# run this by 
-# python main2.py --debug  or python main2.py

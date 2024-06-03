@@ -6,6 +6,7 @@ This is the open llm based apps repo. updating soon!
 file structure in the backend server
 
 
+'''bash
 |----- backend
         | - apps
              | - rag 
@@ -28,5 +29,6 @@ file structure in the backend server
         |- vectordb
                | - collection1
 
+'''
               
 
