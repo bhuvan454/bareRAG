@@ -8,12 +8,15 @@ Description: This file is used to query the RAG model
 from langchain_community.llms.ollama import Ollama
 
 
-def query_rag(query_results, prompt):
-    model = Ollama(model="llama3")
-    response = model.invoke(prompt)
+class query_rag:
+    def __init__(self, model):
+        self.model = Ollama(model=model)
 
-    sources = [doc.metadata.get("chunk_id") for doc, _score in query_results]
+    def invoke(self, query_results, prompt):
+        response = self.model.invoke(prompt)
 
-    formated_response = f"Response: {response}\n\nSources: {sources}"
-   
-    return formated_response
+        sources = [doc.get('chunk_id') for doc in query_results['metadatas'][0]]
+    
+        formated_response = f"Response: {response}\n\nSources: {sources}"
+
+        return formated_response

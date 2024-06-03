@@ -28,6 +28,12 @@ class ChromaDB:
         self.collection = self.chroma_client.get_or_create_collection(name = collection_name,embedding_function = embedding_function)
         return self.collection
     
+    def get_list_collections(self):
+        return self.chroma_client.list_collections()
+    
+    def get_collection(self,collection_name,embedding_function):
+        return self.chroma_client.get_collection(name = collection_name,embedding_function = embedding_function)
+    
 
     def add_chunk_ids(self,chunks):
         last_page_id = None

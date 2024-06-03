@@ -4,7 +4,6 @@ import sys
 
 data_path = Path(__file__).resolve().parents[2] / 'db'
 
-print(data_path)
 
 class Config:
     QDRANT_URL = os.getenv("QDRANT_URL","https://localhost:6333")
