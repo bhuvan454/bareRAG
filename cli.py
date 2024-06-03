@@ -1,64 +1,64 @@
-from backend.apps.rag.services.loadingdata import load_pdf
-from backend.apps.rag.services.chunkingdata import split_documents
-from backend.apps.rag.services.vectordb import ChromaDB
-from backend.apps.rag.utils.embeddingfun import CustomOllamaEmbeddings
-from backend.apps.rag.services.query_database import query_database
-from backend.apps.rag.services.llmresponse import query_rag
+# from backend.apps.rag.services.loadingdata import load_pdf
+# from backend.apps.rag.services.chunkingdata import split_documents
+# from backend.apps.rag.services.vectordb import ChromaDB
+
+# from backend.apps.rag.services.query_database import query_database
+# from backend.apps.rag.services.llmresponse import query_rag
 from backend.apps.rag.config import Config
+from backend.apps.rag.utils.chromaDBManager import ChromaDBManager
+from backend.apps.rag.utils.embeddingfun import CustomOllamaEmbeddings
 
+# class ChromaDBManager:
+#     def __init__(self):
+#         self.vector_db = ChromaDB()
+#         self.collection = None
 
+#     def get_list_collections(self):
+#         return self.vector_db.get_list_collections()
 
-class ChromaDBManager:
-    def __init__(self):
-        self.vector_db = ChromaDB()
-        self.collection = None
+#     def get_collection(self, collection_name: str, embedding_function):
+#         return self.vector_db.get_collection(collection_name,CustomOllamaEmbeddings())
 
-    def get_list_collections(self):
-        return self.vector_db.get_list_collections()
+#     def initialize_database(self, pdf_path: str, collection_name: str, debug: bool = False):
+#         documents_data = load_pdf(pdf_path)
+#         if debug:
+#             print("Loaded Documents Data:", documents_data)
 
-    def get_collection(self, collection_name: str, embedding_function):
-        return self.vector_db.get_collection(collection_name,CustomOllamaEmbeddings())
+#         split_documents_data = split_documents(documents_data)
+#         if debug:
+#             print("Split Documents Data:", split_documents_data)
 
-    def initialize_database(self, pdf_path: str, collection_name: str, debug: bool = False):
-        documents_data = load_pdf(pdf_path)
-        if debug:
-            print("Loaded Documents Data:", documents_data)
+#         self.collection = self.vector_db.add_collection(collection_name, 
+#                                                         CustomOllamaEmbeddings())
+#         self.vector_db.add_chunks(split_documents_data)
 
-        split_documents_data = split_documents(documents_data)
-        if debug:
-            print("Split Documents Data:", split_documents_data)
-
-        self.collection = self.vector_db.add_collection(collection_name, 
-                                                        CustomOllamaEmbeddings())
-        self.vector_db.add_chunks(split_documents_data)
-
-        print(f"Collection '{collection_name}' created and data added.")
+#         print(f"Collection '{collection_name}' created and data added.")
 
 
     
-    def interactive_query(self, collection, debug: bool = False):
-        llm_rag_query  = query_rag("llama3")
-        while True:
-            query_text = input("Enter your query (or 'exit' to quit): ")
-            if query_text.lower() == 'exit':
-                break
+#     def interactive_query(self, collection, debug: bool = False):
+#         llm_rag_query  = query_rag("llama3")
+#         while True:
+#             query_text = input("Enter your query (or 'exit' to quit): ")
+#             if query_text.lower() == 'exit':
+#                 break
 
-            query_context, prompt = query_database(collection, query_text)
+#             query_context, prompt = query_database(collection, query_text)
 
-            if debug:
-                print("Query Context:", query_context)
-                print("Prompt:", prompt)
+#             if debug:
+#                 print("Query Context:", query_context)
+#                 print("Prompt:", prompt)
 
-            rag_response = llm_rag_query.invoke(query_context, prompt)
-            print("RAG Response:", rag_response)
+#             rag_response = llm_rag_query.invoke(query_context, prompt)
+#             print("RAG Response:", rag_response)
 
-    def delete_collection(self, collection_name: str):
-        self.collection = self.vector_db.get_collection(collection_name, CustomOllamaEmbeddings())
-        if self.collection:
-            self.vector_db.chroma_client.delete_collection(collection_name)
-            print(f"Collection '{collection_name}' deleted.")
-        else:
-            print(f"Collection '{collection_name}' not found.")
+#     def delete_collection(self, collection_name: str):
+#         self.collection = self.vector_db.get_collection(collection_name, CustomOllamaEmbeddings())
+#         if self.collection:
+#             self.vector_db.chroma_client.delete_collection(collection_name)
+#             print(f"Collection '{collection_name}' deleted.")
+#         else:
+#             print(f"Collection '{collection_name}' not found.")
 
 
 def main():
@@ -98,13 +98,13 @@ def main():
                 continue
         
             collection = db_manager.get_collection(collection_name, CustomOllamaEmbeddings())
-            print(collection)
-
             if not collection:
                 print(f"Collection '{collection_name}' not found.")
                 continue
 
-            db_manager.interactive_query(collection, args.debug)
+            # db_manager.interactive_query(collection, args.debug)
+            query_text = input("Enter your query: ")
+            db_manager.query_database(query_text, collection_name, args.debug)
 
 
         elif choice == '3':

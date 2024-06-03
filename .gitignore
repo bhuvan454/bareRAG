@@ -1,21 +1,13 @@
 
-# adding the gitignore file
-
-
 .venv
 *.pyc
 
 
-# Byte-compiled / optimized / DLL files
 __pycache__/
 
-# C extensions
 *.so
 
-# no db folder
-db/
 
-# Distribution / packaging
 .Python
 build/
 develop-eggs/

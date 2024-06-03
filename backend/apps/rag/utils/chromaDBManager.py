@@ -18,12 +18,13 @@ class ChromaDBManager:
     def __init__(self):
         self.vector_db = ChromaDB()
         self.collection = None
+        self.model = query_rag("llama3")
 
 
     def get_list_collections(self):
         return self.vector_db.get_list_collections()
 
-    def get_collection(self, collection_name: str):
+    def get_collection(self, collection_name: str, embedding_function):
         return self.vector_db.get_collection(collection_name, CustomOllamaEmbeddings())
 
     def initialize_database(self, pdf_path: str, collection_name: str, debug: bool = False):
@@ -50,14 +51,14 @@ class ChromaDBManager:
 
 
     def query_database(self, query_text: str, collection_name: str, debug: bool = False):
-        collection = self.get_collection(collection_name)
+        collection = self.get_collection(collection_name, CustomOllamaEmbeddings())
         query_context, prompt = query_database(collection, query_text)
 
         if debug:
             print("Query Context:", query_context)
             print("Prompt:", prompt)
 
-        rag_response = query_rag("llama3").invoke(query_context, prompt)
+        rag_response = self.model.invoke(query_context, prompt)
         print("RAG Response:", rag_response)
 
         return rag_response

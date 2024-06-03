@@ -6,7 +6,7 @@ This is the open llm based apps repo. updating soon!
 file structure in the backend server
 
 
-'''bash
+```bash
 |----- backend
         | - apps
              | - rag 
@@ -18,17 +18,18 @@ file structure in the backend server
                          | - llmresponse_5.py
                   | - utils
                          | - embedding_func.py
+                         | - chromaDBManager.py
                   | - config.py
         | - core
              | - config.py
 
 
-|----- dbase 
+|----- database
         |- docsdata
                | - doc1.pdf
-        |- vectordb
+        |- vector_db
                | - collection1
 
-'''
+```
               
 
