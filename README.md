@@ -54,6 +54,7 @@ To run the command line interface
 python cli.py
 
 ```
+![alt text](image-1.png)
 
 to run the fastapi based endpoints
 
